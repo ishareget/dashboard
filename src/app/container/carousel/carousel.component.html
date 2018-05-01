@@ -1,0 +1,127 @@
+<main class="col-sm-12 ml-sm-auto col-md-10 pt-3" role="main">
+
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['']">首頁</a>
+        </li>
+        <li class="breadcrumb-item active">輪播圖</li>
+    </ol>
+    <div class="row loading mt-5 mb-2" *ngIf="isLoading">
+        <div class="col-md-12 text-center">
+            <div class="loader">Loading...</div>
+        </div>
+    </div>
+    <div class="card mb-3" *ngIf="!isLoading">
+        <div class="card-header">
+            <i class="fa fa-fw fa-file-text-o"></i> 輪播圖
+            <label class="btn btn-primary pull-right">
+                <input id="upload_img" [hidden]="true" type="file" accept="image/*" (change)="fileUploadListener($event)" data-toggle="modal" data-target="#uploadphoto">
+                <i class="fa fa-photo"></i> 上傳圖片
+            </label>
+        </div>
+
+        <div class="container mt-5 mb-5" *ngIf="datas.length === 0">
+            <div class="row card-body table-responsive text-center">
+                <h2>
+                    <i class="fa fa-search" aria-hidden="true"></i>查無結果</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="datas.length > 0" class="card-body text-gray table-responsive">
+            <table class="table table-striped table-border table-button">
+                <thead class="text-center">
+                    <tr>
+                        <th>圖片順序</th>
+                        <th>圖片</th>
+                        <th>圖片描述</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngIf="isLoading">
+                        <td colspan="9">
+                            <div class="loader">Loading...</div>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let data of datas | paginate: { itemsPerPage: 10, currentPage: page } ; let i = index">
+                        <th scope="row">{{ i + ( page - 1 ) * 10 + 1 }}</th>
+                        <td>
+                            <img [src]="data.pictureurl" class="rounded">
+                        </td>
+                        <td>{{ data.picturecontent }}</td>
+                        <td class="text-right">
+                            <swal #dialogDeleteError title="資料刪除失敗，請重新確認" type="error"></swal>
+                            <swal #dialogChildDelete title="確定要刪除？" type="question" [options]="{ showCancelButton: 'true' }" (confirm)="userDeletePicture(data)"></swal>
+                            <a href="{{data.picturelink}}" target="_blank">
+                                <label class="btn btn-primary mr-2 mt-2">連結</label>
+                            </a>
+                            <button type="button" class="btn btn-info mr-2" (click)="userGetPictureById(data.id)" data-toggle="modal" data-target="#modelUpdatePicture">編輯</button>
+                            <button type="button" class="btn btn-danger mr-2" (click)="dialogChildDelete.show()">刪除</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Update Picture -->
+    <div class="modal fade" id="modelUpdatePicture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">編輯圖片</h4>
+                    <button #modelClose type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label class="control-label">圖片順序:</label>
+                            <input type="text" placeholder="請輸入數字" class="form-control" name="pictureid" [(ngModel)]="data.picturesort" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">圖片描述:</label>
+                            <input type="text" class="form-control" name="picturecontent" [(ngModel)]="data.picturecontent" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">圖片超連結:</label>
+                            <input type="text" placeholder="ex: www.ishareget.org" class="form-control" name="picturelink" [(ngModel)]="data.picturelink"
+                                required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <swal #dialogSuccess title="資料更新成功" type="success" [options]="{ timer : '1000' }"></swal>
+                    <swal #dialogError title="資料錯誤，請重新確認" type="error" [options]="{ timer : '1000' }"></swal>
+                    <swal #dialogUpdateError title="資料更新失敗，請重新確認" type="error" [options]="{ timer : '1000' }"></swal>
+                    <button type="button" class="btn btn-primary" (click)="userUpdatePicture();">儲存</button>
+                    <button type="button" class="btn btn-secondary" (click)="GetPicture();" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+</main>
+
+<div id="uploadphoto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadphoto" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>
+                    <i class="fa fa-photo mr-2" aria-hidden="true"></i>選擇圖片
+                </h5>
+            </div>
+            <div class="modal-body text-center w-100">
+                <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+            </div>
+            <div class="modal-footer w-100">
+                <button type="submit" class="btn btn-primary mr-3" (click)="readUrl(data.image)">送出</button>
+                <button #modelClose type="submit" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

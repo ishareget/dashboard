@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#" [routerLink]="['/home']" (click)="sidebarActive($event)">天使計劃 - 後台管理系統</a>
+    <button class="navbar-toggler navbar-toggler-right d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div *ngIf="this.isLogin" class="sidebar">
+            <ul class="navbar-nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': 'home'==sideActive }" href="#" [routerLink]="['/home']" (click)="sidebarActive($event)">
+                        <i class="fa fa-fw fa-thumb-tack"></i>資訊
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="permission.setcarousel">
+                    <a class="nav-link nav-link-collapse collapsed" [ngClass]="{ 'active': 'carousel'==sideActive }" data-toggle="collapse" href="#collapsePage" aria-expanded="false">
+                        <i class="fa fa-fw fa-file-text-o"></i>頁面管理</a>
+                    <ul class="sidebar-sub collapse" id="collapsePage" aria-expanded="false">
+                        <li>
+                            <a [ngClass]="{'active': 'carousel'==sideActive }" href="#" [routerLink]="['/carousel']" (click)="sidebarActive($event)">輪播圖</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" *ngIf="permission.missiondelete">
+                    <a class="nav-link" [ngClass]="{'active': 'mission'==sideActive }" href="#" [routerLink]="['/mission']" (click)="sidebarActive($event)">
+                        <i class="fa fa-tasks"></i> 任務管理
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-collapse collapsed" [ngClass]="{ 'active': 'student'==sideActive || 'store'==sideActive || 'teacher'==sideActive || 'volunteer'==sideActive }" data-toggle="collapse" href="#collapseUsers" aria-expanded="false ">
+                        <i class="fa fa-fw fa-users"></i>帳號管理</a>
+                    <ul class="sidebar-sub collapse" id="collapseUsers" aria-expanded="false">
+                        <li>
+                            <a [ngClass]="{'active': 'student'==sideActive }" href="#" [routerLink]="['/student']" (click)="sidebarActive($event);">學童</a>
+                        </li>
+                        <!-- <li>
+                            <a [ngClass]="{'active': 'store'==sideActive }" href="#" [routerLink]="['/store']" (click)="sidebarActive($event)">店家</a>
+                        </li> -->
+                        <li>
+                            <a [ngClass]="{'active': 'teacher'==sideActive }" href="#" [routerLink]="['/teacher']" (click)="sidebarActive($event)">教職員</a>
+                        </li>
+                        <li>
+                            <a [ngClass]="{'active': 'volunteer'==sideActive }" href="#" [routerLink]="['/volunteer']" (click)="sidebarActive($event)">志工</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-collapse collapsed" [ngClass]="{'active': 'record'==sideActive || 'admin'==sideActive }" data-toggle="collapse" href="#collapsePoint" aria-expanded="false ">
+                        <i class=" fa fa-fw fa-credit-card "></i>點數管理</a>
+                    <ul class="sidebar-sub collapse" id="collapsePoint" aria-expanded="false">
+                        <li>
+                            <a [ngClass]="{'active': 'record'==sideActive }" href="#" [routerLink]="['/record']" (click)="sidebarActive($event)">兌換紀錄</a>
+                        </li>
+                        <li *ngIf="permission.pointsend">
+                            <a [ngClass]="{'active': 'admin'==sideActive }" href="#" [routerLink]="['/admin']" (click)="sidebarActive($event)">點數發放</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- <li class="nav-item">
+          <a class="nav-link nav-link-collapse collapsed" [ngClass]="{'active': 'timer'==sideActive }" data-toggle="collapse"
+            href="#collapseSystem" aria-expanded="false ">
+            <i class="fa fa-fw fa-cog"></i>設定</a>
+          <ul class="sidebar-sub collapse" id="collapseSystem" aria-expanded="false">
+            <li>
+              <a [ngClass]="{'active': 'timer'==sideActive }" href="#" [routerLink]="['/timer']" (click)="sidebarActive($event)">用餐時段</a>
+            </li>
+          </ul>
+        </li> -->
+                <li class="nav-item ">
+                    <a class="nav-link" [ngClass]="{'active': 'log'==sideActive }" href="#" [routerLink]="['/log']" (click)="sidebarActive($event)">
+                        <i class="fa fa-fw fa-calendar"></i>日誌
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <form *ngIf="isLogin" class="form-inline ml-auto">
+            <!-- <input class="form-control mr-sm-2 " type="text" placeholder="Search" aria-label="Search"> -->
+
+            <label class="form-control bg-dark text-white">Hi, {{ isLogin.name }}</label>
+            <swal #dialogLogout title="確定要登出？" type="question" [options]="{ showCancelButton: 'true' }" (confirm)="logout()"></swal>
+            <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit" (click)="routerget()">前台</button>
+            <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit" (click)="dialogLogout.show()">登出</button>
+        </form>
+    </div>
+</nav>

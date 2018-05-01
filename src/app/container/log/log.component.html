@@ -1,0 +1,139 @@
+<main class="col-sm-12 ml-sm-auto col-md-10 pt-3" role="main">
+
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['']">首頁</a>
+        </li>
+        <li class="breadcrumb-item active">系統日誌</li>
+    </ol>
+    <div class="row loading mt-5 mb-2" *ngIf="isLoading">
+        <div class="col-md-12 text-center">
+            <div class="loader">Loading...</div>
+        </div>
+    </div>
+    <div class="card mb-3" *ngIf="!isLoading">
+        <div class="card-header">
+            <i class="fa fa-fw fa-calendar"></i> 系統日誌 - 共 {{ datas.length }} 筆資料
+            <button *ngIf="userPermission.cleanlog" type="button" class="btn btn-danger pull-right" (click)="dialogCleanLog.show()">清空</button>
+            <!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal1">新增</button> -->
+        </div>
+
+        <div class="container mt-5 mb-5" *ngIf="datas.length === 0">
+            <div class="row card-body table-responsive text-center">
+                <h2>
+                    <i class="fa fa-search" aria-hidden="true"></i>查無結果</h2>
+            </div>
+        </div>
+
+        <div class="card-body table-responsive" *ngIf="datas.length != 0">
+            <table class="table table-striped table-border">
+                <thead class="text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>登入帳號</th>
+                        <th>登入位址</th>
+                        <th>登入時間</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngFor="let data of datas | paginate: { itemsPerPage: 10, currentPage: page } ; let i = index">
+                        <th scope="row">{{ i + ( page - 1 ) * 10 + 1 }}</th>
+                        <td>{{data.loginusername}}</td>
+                        <td>{{data.loginip}}</td>
+                        <td>{{data.logintime | date: 'yyyy/MM/dd HH:mm:ss' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer small text-muted">
+            <div class="has-text-centered text-center" *ngIf="datas.length != 0">
+                <pagination-controls maxSize="5" (pageChange)="page = $event"></pagination-controls>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">新增學童</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label class="control-label">姓名:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">性別:</label>
+                            <div class="form-check">
+                                <label class="custom-control custom-radio">
+                                    <input id="sex1" name="sex" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">男生</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="sex2" name="sex" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">女生</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">葷素:</label>
+                            <div class="form-check">
+                                <label class="custom-control custom-radio">
+                                    <input id="meal1" name="meal" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">葷食</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="meal2" name="meal" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">素食</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">電話:</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">住址:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">就讀學校:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">監護人:</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">監護人手機:</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">備註:</label>
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<swal #dialogCleanLog title="確定要刪除？" type="question" [options]="{ showCancelButton: 'true' }" (confirm)="cleanLog()"></swal>
+<swal #dialogSuccess title="資料更新成功" type="success" [options]="{ timer : '1000' }"></swal>

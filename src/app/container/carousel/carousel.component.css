@@ -1,0 +1,17 @@
+font{
+    font-size: 12px;
+    white-space: nowrap;
+}
+.rounded{
+    width: 288px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 0;
+    border: 0;
+}
+@media (min-width: 768px) {
+    .modal-xl {
+        width: 90%;
+        max-width: 1000px;
+    }
+}

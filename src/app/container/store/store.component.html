@@ -1,0 +1,129 @@
+<main class="col-sm-12 ml-sm-auto col-md-10 pt-3" role="main">
+
+    <!-- Breadcrumbs
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a [routerLink]="['']">首頁</a>
+    </li>
+    <li class="breadcrumb-item active">店家管理</li>
+  </ol>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      <i class="fa fa-users"></i> 店家列表 - 共 {{ datas.length }} 筆資料
+      <button *ngIf="userdata.adminname" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modelAddStore" (click)="data = []; isAddMode = true;">新增</button>
+    </div>
+
+    <div class="card-body table-responsive">
+      <table class="table table-striped table-border table-button">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>帳號</th>
+            <th>店名</th>
+            <th>地址</th>
+            <th>店長</th>
+            <th>電話</th>
+            <th>統一編號</th>
+            <th>店家類型</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="isLoading" class="text-center">
+            <td colspan="9">
+              <i class="fa fa-spinner fa-3x fa-spin"></i>
+            </td>
+          </tr>
+          <tr *ngFor="let data of datas | paginate: { itemsPerPage: 10, currentPage: page } ; let i = index">
+            <th scope="row">{{ i + ( page - 1 ) * 10 + 1 }}</th>
+            <td>{{data.storeusername}}</td>
+            <td>{{data.storename}}</td>
+            <td>{{data.storeaddr}}</td>
+            <td>{{data.storeadminstore}}</td>
+            <td>{{data.storetel}}</td>
+            <td>{{data.storeein}}</td>
+            <td>{{data.storetype}}</td>
+            <td class="text-right">
+              <swal #dialogDeleteError title="資料刪除失敗，請重新確認" type="error"></swal>
+              <swal #dialogStoreDelete title="確定要刪除？" type="question" [options]="{ showCancelButton: 'true' }" (confirm)="userDeleteStore(data)"></swal>
+              <button *ngIf="userdata.adminname" type="button" class="btn btn-info mr-2" (click)="userGetStoreById(data)" data-toggle="modal" data-target="#modelAddStore">編輯</button>
+              <button *ngIf="userdata.adminname" type="button" class="btn btn-danger mr-2" (click)="dialogStoreDelete.show()">刪除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="card-footer small text-muted">
+      <div class="has-text-centered text-center">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+
+  Modal
+  <div class="modal fade" id="modelAddStore" tabindex="-1" role="dialog" aria-labelledby="modelAddStoreLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 *ngIf="isAddMode === true" class="modal-title" id="modelAddStoreLabel">新增店家</h4>
+          <h4 *ngIf="isAddMode === false" class="modal-title" id="modelAddStoreLabel">編輯店家</h4>
+          <button #modelClose type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label class="control-label">帳號:</label>
+              <input type="text" class="form-control" name="storeusername" [(ngModel)]="data.storeusername" [readonly]="!isAddMode" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">密碼:</label>
+              <input type="password" class="form-control" name="storepassword" [(ngModel)]="data.storepassword" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">確認密碼:</label>
+              <input type="password" class="form-control" name="storepasswordRe" [(ngModel)]="data.storepasswordRe" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">店名:</label>
+              <input type="text" class="form-control" name="storename" [(ngModel)]="data.storename" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">地址:</label>
+              <input type="text" class="form-control" name="storeaddr" [(ngModel)]="data.storeaddr" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">店長:</label>
+              <input type="text" class="form-control" name="storeadminstore" [(ngModel)]="data.storeadminstore" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">電話:</label>
+              <input type="text" class="form-control" name="storetel" [(ngModel)]="data.storetel" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">統一編號:</label>
+              <input type="text" class="form-control" name="storeein" [(ngModel)]="data.storeein" required>
+            </div>
+            <div class="form-group">
+              <label class="control-label">店家類型:</label>
+              <input type="text" class="form-control" name="storetype" [(ngModel)]="data.storetype" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <swal #dialogSuccess title="資料更新成功" type="success" [options]="{ timer : '1000' }"></swal>
+          <swal #dialogError title="資料錯誤，請重新確認" type="error" [options]="{ timer : '1000' }"></swal>
+          <swal #dialogUpdateError title="資料更新失敗，請重新確認" type="error" [options]="{ timer : '1000' }"></swal>
+          <button type="button" class="btn btn-secondary" (click)="data = []">重填</button>
+          <button type="button" class="btn btn-secondary" (click)="userGetStore();" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" (click)="userDataCheck();">儲存</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+</main>

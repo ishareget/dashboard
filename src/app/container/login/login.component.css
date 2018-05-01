@@ -1,0 +1,27 @@
+.login-page {
+    height: calc(100vh - 56px);
+    background-color: #c0c0c0;
+}
+
+
+/* 外層表單 */
+
+.login-page .login-form {
+    padding: 0;
+    border-radius: 8px;
+}
+
+
+/* 內層表單 */
+
+.login-form .login-group {
+    padding: 2rem;
+}
+
+.login-form .login-title {
+    margin: 0;
+    padding: 1rem;
+    color: #fff;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}

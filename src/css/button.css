@@ -1,0 +1,50 @@
+/*
+
+  按鈕客製化
+
+  使用方法如同 bootstrap 的 btn-lg
+
+  bootstrap 預設：
+  class="btn-lg"
+  class="btn-sm"
+
+*/
+
+.btn {
+    border: none !important;
+    outline: none !important;
+}
+
+.btn-maxw {
+    width: 100%;
+}
+/* 展演 */
+.btn-blue {
+    color: #ffffff;
+    background-color: #24a2b8;
+  }
+  /* 影片 */
+  .btn-orange {
+    color: #ffffff;
+    background-color: #fcaa00;
+  }
+  /* 旅遊 */
+  .btn-purple {
+    color: #ffffff;
+    background-color: #e392fe;
+  }
+  /* 運動 */
+  .btn-sky {
+    color: #ffffff;
+    background-color: #53d5fd;
+  }
+  /* 美術 */
+  .btn-red {
+    color: #ffffff;
+    background-color: #fa4015;
+  }
+  /* 環保 */
+  .btn-green {
+    color: #ffffff;
+    background-color: #77bb41;
+  }

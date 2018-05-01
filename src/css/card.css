@@ -1,0 +1,10 @@
+/* 修正 card  */
+
+.card {
+    background-color: transparent;
+}
+
+.card .card-header {
+    line-height: 2.2rem;
+    font-size: 1.2rem;
+}

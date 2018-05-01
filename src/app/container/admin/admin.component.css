@@ -1,0 +1,12 @@
+.btn-circle {
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 24px;
+    border-radius: 17.5px;
+    display: inline-block;
+    background-color: #dc3545;
+    color: #fff;
+}
