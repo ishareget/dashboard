@@ -60,7 +60,7 @@ export class StudentComponent implements OnInit {
    */
   public async GetStudent() {
     this.isLoading = true;
-    await this.userService.GetStudent().subscribe(
+    await this.userService.GET_AllStudent().subscribe(
       result => {
         this.datas = result;
         this.getUserInfo();

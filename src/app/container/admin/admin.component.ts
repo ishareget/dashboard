@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../service/user/user.service';
+import { NotificationService } from '../../service/notification/notification.service';
 import { SwalComponent } from '@toverux/ngsweetalert2';
 
 import { async } from '@angular/core/testing';
@@ -13,13 +14,14 @@ import { ChildActivationEnd } from '@angular/router/src/events';
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
-  providers: [UserService]
+  providers: [UserService, NotificationService]
 
 })
 export class AdminComponent implements OnInit {
 
   @ViewChild('dialogPassSuccess') private swalDialogPassSuccess: SwalComponent;
   @ViewChild('dialogError') private swalDialogError: SwalComponent;
+  @ViewChild('dialogPermissionError') private swalDialogPermissionError: SwalComponent
 
   private userdata: any = null;
   public isLoading: Boolean = true;
@@ -39,7 +41,8 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private notificationservice: NotificationService
   ) { }
 
   ngOnInit() {
@@ -53,7 +56,7 @@ export class AdminComponent implements OnInit {
    */
   public async GetAllStudent() {
     this.datas = [];
-    await this.userService.GetStudent().subscribe(
+    await this.userService.GET_AllStudent().subscribe(
       result => {
         this.studentalldata = result;
         this.GetAllMission(1);
@@ -72,6 +75,10 @@ export class AdminComponent implements OnInit {
       result => {
         if (result[0]) {
           this.userdata = result[0];
+          if (this.userdata.logingroup !== 4) {
+            this.swalDialogPermissionError.show();
+            this.router.navigate(['/home']);
+          }
           this.GetPermission();
         }
       }
@@ -102,24 +109,7 @@ export class AdminComponent implements OnInit {
       result => {
         this.isLoading = false;
         this.groupdatas = result;
-        this.userGetPersonnalGroup();
       });
-  }
-
-  /**
-   * 取得單位資料 個人
-   *
-   * @memberof AdminComponent
-   */
-  public async userGetPersonnalGroup() {
-    for (let i = 0; i < this.datas.length; i++) {
-      for (let j = 0; j < this.groupdatas.length; j++) {
-        if (this.datas[i].groupid === this.groupdatas[j].id) {
-          this.datas[i].group = this.groupdatas[j].groupname;
-          break;
-        }
-      }
-    }
   }
 
   /**
@@ -167,10 +157,12 @@ export class AdminComponent implements OnInit {
   public async GetAllMission(body) {
     await this.userService.GetJoin(body).subscribe(
       result => {
-        if (result.affectedRows > 0) {
+        if (result) {
           this.isLoading = false;
           result.forEach(element => {
-            if (element.status === '已審核') { this.datas.push(element) }
+            if (element.status === '已審核') {
+              this.datas.push(element);
+            }
           });
         }
       });
@@ -184,7 +176,7 @@ export class AdminComponent implements OnInit {
    * @param mpoint
    * @memberof AdminComponent
    */
-  public async PassMission(cuid: String, mid: Number, mpoint: Number) {
+  public async PassMission(cuid: String, mid: Number, mpoint: Number, index: Number) {
     this.GetStudent(cuid);
     this.UpdateStudent(cuid, mpoint + this.studentdata.point);
     const body = {
@@ -197,12 +189,38 @@ export class AdminComponent implements OnInit {
     await this.userService.GiveMission(body)
       .subscribe(result => {
         if (result.affectedRows > 0) {
+          this.createNotification(moment().format('YYYY-MM-DD HH:mm:ss'), mid, index);
+        } else {
+          this.swalDialogError.show();
+        }
+      });
+  }
+
+  /**
+   *  新增通知
+   * 
+   *  @member AdminComponent
+   */
+  public async createNotification(createtime, missionId, index) {
+    const body = {
+      username: this.datas[index].studentusername,
+      type: '點數',
+      groupid: this.studentdata.groupid,
+      mission_id: missionId,
+      noti_time: createtime,
+      description: `${this.userdata.name}--發放點數100點-- ${this.datas[index].missionname}`,
+      status: 0
+    }
+    await this.notificationservice.createNoti(body).subscribe(
+      result => {
+        if (result.affectedRows === 1) {
           this.swalDialogPassSuccess.show();
           setTimeout(() => { this.GetAllStudent(); }, 1200);
         } else {
           this.swalDialogError.show();
         }
-      });
+      }
+    )
   }
 
 

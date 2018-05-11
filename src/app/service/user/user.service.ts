@@ -74,7 +74,7 @@ export class UserService {
    * @returns
    * @memberof UserService
    */
-  public GetStudent() {
+  public GET_AllStudent() {
     return this.http.get('/api/student', this.packToken())
       .map((res) => {
         return res.json() || {}
