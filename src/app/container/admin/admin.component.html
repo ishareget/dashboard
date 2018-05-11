@@ -70,7 +70,7 @@
                             <swal type="success" title="已發送完成" #dialogPassSuccess [options]="{ timer : '1000' }"></swal>
                             <swal #dialogDeleteError title="資料刪除失敗，請重新確認" type="error" [options]="{ timer : '1000' }"></swal>
                             <swal type="question" title="確定要發放？" #dialogPass [options]="{ showCancelButton: 'true' }" (confirm)="PassMission(data.studentusername, data.missionid, data.missionpoint, i)"></swal>
-                            <a class="btn btn-primary mr-2" href='http://www.ishareget.org/activity/mission/exp?id={{data.missionid}}&studentusername={{data.studentusername}}'
+                            <a class="btn btn-primary mr-2" href='http://www.ishareget.org/#/mission/exp?id={{data.missionid}}&username={{data.studentusername}}'
                                 target="_blank">心得</a>
                             <button type="button" class="btn btn-danger mr-2" (click)="dialogPass.show()">發放</button>
                         </td>
