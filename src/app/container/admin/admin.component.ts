@@ -216,7 +216,8 @@ export class AdminComponent implements OnInit {
       result => {
         console.log(result);
         if (result.affectedRows === 1) {
-          // this.swalDialogPassSuccess.show();
+          console.log('有進');
+          this.swalDialogPassSuccess.show();
           setTimeout(() => { this.GetAllStudent(); }, 1200);
         } else {
           this.swalDialogError.show();
