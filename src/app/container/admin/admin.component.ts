@@ -211,12 +211,9 @@ export class AdminComponent implements OnInit {
       description: `${this.userdata.name}--發放點數100點-- ${this.datas[index].missionname}`,
       status: 0
     }
-    console.log(body);
     await this.notificationservice.createNoti(body).subscribe(
       result => {
-        console.log(result);
         if (result.affectedRows === 1) {
-          console.log('有進');
           this.swalDialogPassSuccess.show();
           setTimeout(() => { this.GetAllStudent(); }, 1200);
         } else {
