@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { QRCodeModule } from 'angular2-qrcode';
+import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 
 import { enableProdMode } from '@angular/core';
 
@@ -36,6 +37,7 @@ import animateScrollTo from 'animated-scroll-to';
 import { StudentComponent } from './container/student/student.component';
 import { VolunteerComponent } from './container/volunteer/volunteer.component';
 import { MissionComponent } from './container/mission/mission.component';
+import { BrowsercheckComponent } from './container/browsercheck/browsercheck.component';
 
 enableProdMode();
 
@@ -54,7 +56,8 @@ enableProdMode();
     AdminComponent,
     StudentComponent,
     VolunteerComponent,
-    MissionComponent
+    MissionComponent,
+    BrowsercheckComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ enableProdMode();
       // confirmButtonClass: 'btn btn-lg btn-primary',
       // cancelButtonClass: 'btn btn-lg'
     }),
+    Ng2DeviceDetectorModule.forRoot(),
     NgxPaginationModule,
     ImageCropperModule
   ],

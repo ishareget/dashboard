@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import animateScrollTo from 'animated-scroll-to';
+import { Router} from '@angular/router';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 declare let jquery: any;
 declare let $: any;
@@ -11,10 +13,19 @@ declare let $: any;
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
+  isCheck = true;
+
+  constructor(
+    private route: Router
+  ) { }
 
   ngOnInit() {
-
+    if (!Cookie.get('checkAdBrowser')) {
+      this.route.navigate(['/browsercheck']);
+      this.isCheck = false;
+    } else {
+      this.isCheck = true;
+    }
     this.scrollShow();
     this.scrollMove();
   }

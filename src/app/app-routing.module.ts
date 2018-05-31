@@ -14,6 +14,7 @@ import { LoginComponent } from './container/login/login.component';
 import { CarouselComponent } from './container/carousel/carousel.component';
 import { AdminComponent } from './container/admin/admin.component';
 import { MissionComponent } from './container/mission/mission.component';
+import { BrowsercheckComponent } from './container/browsercheck/browsercheck.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'timer', component: TimerComponent },
   { path: 'log', component: LogComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'browsercheck', component: BrowsercheckComponent },
   { path: '**', component: HomeComponent }
 ];
 
