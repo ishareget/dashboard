@@ -32,18 +32,21 @@ export class BrowsercheckComponent implements OnInit {
           break;
         case 'firefox':
         case 'ms-edge':
-          this.swalDialogCheck.show();
+          // this.swalDialogCheck.show();
           setTimeout(() => {
-            Cookie.set('checkBrowser', 'checkOK');
+            Cookie.set('checkAdBrowser', 'checkOK');
             window.location.href = this.url.ishare;
           }, 1000);
           break;
         case 'ie':
-          this.swalDialogOld.show();
+          // 請到index.html
+          // this.swalDialogOld.show();
           window.location.href = this.url.download;
           break;
         default:
-          this.swalDialogCheck.show();
+          // this.swalDialogCheck.show();
+          Cookie.set('checkAdBrowser', 'checkOK');
+          window.location.href = this.url.ishare;
           break;
       }
     }, 4000);
