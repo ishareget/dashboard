@@ -45,7 +45,7 @@
                     <tr *ngFor="let data of datas | paginate: { itemsPerPage: 10, currentPage: page } ; let i = index">
                         <th scope="row">{{ i + ( page - 1 ) * 10 + 1 }}</th>
                         <td>
-                            <img *ngIf="!data.picture" src="http://fakeimg.pl/60x60/?text=Img" class="rounded" />
+                            <img *ngIf="!data.picture" src="http://via.placeholder.com/60x60" class="rounded" />
                             <img *ngIf="data.picture" [src]='data.picture' class="rounded" />
                         </td>
                         <td>{{ data.username }}</td>
